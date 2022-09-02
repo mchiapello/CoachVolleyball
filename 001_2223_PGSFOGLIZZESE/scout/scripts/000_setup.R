@@ -1,6 +1,5 @@
 # Needed libraries
 library(datavolley)
-library(ovideo)
 library(ovscout2)
 library(tidyverse)
 library(fs)
@@ -24,10 +23,16 @@ ma <- function(date = "2022-09-01",
     }
 }
 
-out <- ma(date = "2022-01-01", type = "part")
+opp <- "altri"
+us <- "PGS Foglizzese"
+date <- "2022-09-01"
+out <- ma(date = date, type = "allenamento")
 
 # Copy video clip inside new created folder
 # read video
+video_file <- dir_ls(out, regexp = "MOV$")
+system(paste0("ffmpeg -i ", video_file, " -c:v copy -c:a copy ",
+              video_file, ".mp4"))
 video_file <- dir_ls(out, regexp = "mp4$")
 ref <- ovideo::ov_shiny_court_ref(video_file = video_file)
 
@@ -36,12 +41,12 @@ ref <- ovideo::ov_shiny_court_ref(video_file = video_file)
 # PARTITA
 # Match info
 match <- tibble(date = lubridate::ymd(date),
-                time = lubridate::hms("16:00:00"),
+                time = lubridate::hms("19:30:00"),
                 season = "2022-2023",
-                league = "POU13F UISP",
-                phase = "girone unico",
+                league = "U14F",
+                phase = "andata",
                 home_away = FALSE,
-                day_number = NA,
+                day_number = 2,
                 match_number = NA,
                 text_encodong = 1,
                 regulation = "indoor rally point",
@@ -51,8 +56,8 @@ match <- tibble(date = lubridate::ymd(date),
 teams <- tibble(team_id = c("FOG", opp),
                 team = c(us, opp),
                 set_won = c(3, 2),
-                coach = c("Berardi", "Unknow"),
-                assistent = c("Chiapello", "Unknow"),
+                coach = c("Chiapello", "Unknow"),
+                assistent = c("Berardi", "Unknow"),
                 shirt_colour = c("White", "Blue"),
                 X7 = NA,
                 home_away_team  = c("*", "a"),
@@ -62,7 +67,7 @@ teams <- tibble(team_id = c("FOG", opp),
 # ALLENAMENTI
 # Match info
 match <- tibble(date = lubridate::ymd(date),
-                time = lubridate::hms("16:00:00"),
+                time = lubridate::hms("19:30:00"),
                 season = "2022-2023",
                 league = "Allenamento",
                 phase = "Pre-season",
@@ -77,8 +82,8 @@ match <- tibble(date = lubridate::ymd(date),
 teams <- tibble(team_id = c("FOG", opp),
                 team = c(us, opp),
                 set_won = c(3, 2),
-                coach = c("Berardi", "Unknow"),
-                assistent = c("Chiapello", "Unknow"),
+                coach = c("Chiapello", "Unknow"),
+                assistent = c("Berardi", "Unknow"),
                 shirt_colour = c("White", "Blue"),
                 X7 = NA,
                 home_away_team  = c("*", "a"),
@@ -89,3 +94,17 @@ x <- dv_create(teams = teams, match = match,
                players_h = readRDS("001_2223_PGSFOGLIZZESE/scout/tmp/players_fog"), 
                players_v = readRDS("001_2223_PGSFOGLIZZESE/scout/tmp/players_avv"))
 
+## enter the team lineups for set 1
+x <- dv_set_lineups(x, set_number = 1, 
+                    lineups = list(c(42,11,28,32,65,27), 
+                                   c(1, 2, 3 , 4, 5, 6)), 
+                    setter_positions = c(3, 1))
+
+ov_scouter(x, video_file = video_file, court_ref = ref$court_ref,
+           scouting_options = list(transition_sets = TRUE),
+           launch_browser = FALSE)
+
+xrec <- readRDS("/var/folders/9s/jk05tyb12gb5qbs7gg28k63m0000gp/T//Rtmp5TIj7C/file1511a5e8791a7.rds")
+xrec$plays <- NULL ## discard this
+ov_scouter(xrec, video_file = video_file, court_ref = ref$court_ref,
+           scouting_options = list(transition_sets = TRUE))
