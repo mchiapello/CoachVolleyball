@@ -6,6 +6,7 @@ library(fs)
 library(here)
 setwd(here())
 
+###############################################################################
 # Create match/allenamento
 ma <- function(date = "2022-09-01",
                opp = "altri",
@@ -13,11 +14,15 @@ ma <- function(date = "2022-09-01",
     type <- match.arg(type)
     us <- "PGS Foglizzese"
     if(type == "partita"){
-        mat <- paste0(here(), "/001_2223_PGSFoglizzese/U14F/scouts/partite/", date, "_", opp)
+        mat <- paste0(here(), 
+                      "/001_2223_PGSFoglizzese/U14F/scouts/partite/", 
+                      date, "_", opp)
         dir_create(mat) 
         return(mat)
     } else {
-        mat <- paste0(here(), "/001_2223_PGSFoglizzese/U14F/scouts/allenamenti/", date)
+        mat <- paste0(here(), 
+                      "/001_2223_PGSFoglizzese/U14F/scouts/allenamenti/", 
+                      date)
         dir_create(mat) 
         return(mat)
     }
@@ -26,6 +31,9 @@ ma <- function(date = "2022-09-01",
 opp <- "altri"
 us <- "PGS Foglizzese"
 date <- "2022-09-01"
+
+###############################################################################
+# Create data folder
 out <- ma(date = date, type = "allenamento")
 
 # Copy video clip inside new created folder
@@ -34,7 +42,7 @@ video_file <- dir_ls(out, regexp = "mp4$")
 ref <- ovideo::ov_shiny_court_ref(video_file = video_file)
 
 
-#######################
+###############################################################################
 # PARTITA
 # Match info
 match <- tibble(date = lubridate::ymd(date),
