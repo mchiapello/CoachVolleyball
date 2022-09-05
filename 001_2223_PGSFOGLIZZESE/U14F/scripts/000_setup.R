@@ -13,11 +13,11 @@ ma <- function(date = "2022-09-01",
     type <- match.arg(type)
     us <- "PGS Foglizzese"
     if(type == "partita"){
-        mat <- paste0(here(), "/001_2223_PGSFoglizzese/scout/partite/", date, "_", opp)
+        mat <- paste0(here(), "/001_2223_PGSFoglizzese/U14F/scouts/partite/", date, "_", opp)
         dir_create(mat) 
         return(mat)
     } else {
-        mat <- paste0(here(), "/001_2223_PGSFoglizzese/scout/allenamenti/", date)
+        mat <- paste0(here(), "/001_2223_PGSFoglizzese/U14F/scouts/allenamenti/", date)
         dir_create(mat) 
         return(mat)
     }
@@ -30,9 +30,6 @@ out <- ma(date = date, type = "allenamento")
 
 # Copy video clip inside new created folder
 # read video
-video_file <- dir_ls(out, regexp = "MOV$")
-system(paste0("ffmpeg -i ", video_file, " -c:v copy -c:a copy ",
-              video_file, ".mp4"))
 video_file <- dir_ls(out, regexp = "mp4$")
 ref <- ovideo::ov_shiny_court_ref(video_file = video_file)
 
@@ -91,8 +88,8 @@ teams <- tibble(team_id = c("FOG", opp),
 
 
 x <- dv_create(teams = teams, match = match, 
-               players_h = readRDS("001_2223_PGSFOGLIZZESE/scout/tmp/players_fog"), 
-               players_v = readRDS("001_2223_PGSFOGLIZZESE/scout/tmp/players_avv"))
+               players_h = readRDS("001_2223_PGSFOGLIZZESE/U14F/tmp/players_fog"), 
+               players_v = readRDS("001_2223_PGSFOGLIZZESE/U14F/tmp/players_avv"))
 
 ## enter the team lineups for set 1
 x <- dv_set_lineups(x, set_number = 1, 
@@ -101,10 +98,8 @@ x <- dv_set_lineups(x, set_number = 1,
                     setter_positions = c(3, 1))
 
 ov_scouter(x, video_file = video_file, court_ref = ref$court_ref,
-           scouting_options = list(transition_sets = TRUE),
+           scouting_options = list(transition_sets = FALSE,
+                                   nblockers = FALSE),
            launch_browser = FALSE)
 
-xrec <- readRDS("/var/folders/9s/jk05tyb12gb5qbs7gg28k63m0000gp/T//Rtmp5TIj7C/file1511a5e8791a7.rds")
-xrec$plays <- NULL ## discard this
-ov_scouter(xrec, video_file = video_file, court_ref = ref$court_ref,
-           scouting_options = list(transition_sets = TRUE))
+ov_scouter("~/Library/Application Support/ovscout2/autosave/ovscout2-b5ee5503ebf1.ovs")
