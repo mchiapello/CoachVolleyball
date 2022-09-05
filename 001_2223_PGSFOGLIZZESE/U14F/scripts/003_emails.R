@@ -40,7 +40,7 @@ for(i in 1:nrow(metadata)){
     footer_text <- "PGS Foglizzese campionato UISP U13 2021/2022"
 
     # Attachments
-    file <- fs::dir_ls(paste0("matches/", mat, "/", metadata$nickname[i]), regexp = "html$")
+    file <- fs::dir_ls(paste0(out2, "/", metadata$nickname[i]), regexp = "html$")
     
     # Compose the email message
     email <- compose_email(body = body_text,
