@@ -86,3 +86,14 @@ ma <- function(date = "2022-09-01",
         return(output)
     }
 }
+
+##########################
+# Presenze
+add <- function(x,
+                date = "20220830",
+                assenti = c(22, 5)){
+    pres %>% 
+        bind_rows(x %>% 
+                      mutate(date = lubridate::ymd(date),
+                             assenti = ifelse(Numero %in% assenti, 1, 0)))
+}

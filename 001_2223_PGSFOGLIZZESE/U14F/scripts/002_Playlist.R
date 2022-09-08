@@ -1,8 +1,8 @@
 dvw <- dir_ls(out, regexp = "dvw$")
 x <- dv_read(dvw)
-#dv_meta_video(x) <- "https://youtu.be/hlF8nKXnPcA"
+dv_meta_video(x) <- "https://youtu.be/vcAgTSXlNn4"
 # Remove local mp4 file
-file_delete(dir_ls(out, regexp = "mp4$"))
+file_delete(dir_ls(out, regexp = "MOV$"))
 out2 <- out
 
 ## extract the plays
@@ -15,6 +15,7 @@ px2 <- px %>%
            fondamentale = skill)
 
 px3 <- px2 %>% 
+    filter(!is.na(video_time)) %>% 
     group_by(Nome, fondamentale) %>% 
     nest() %>% 
     arrange(Nome, fondamentale)
@@ -32,7 +33,8 @@ setwd(here::here())
 
 px3 <- px3 %>% 
     filter(Nome != "unknown player") %>%
-    mutate(out = map(data, ovideo::ov_video_playlist, x$meta,
+    
+    mutate(out = map(data, ovideo::ov_video_playlist, meta = x$meta,
                      extra_cols = extra_cols),
            outfile = paste0(out2, "/", str_remove(Nome, " "), 
                             "/", fondamentale, ".html"))
