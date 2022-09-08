@@ -48,4 +48,5 @@ for(i in 1:nrow(px4)){
                         outfile = px4$outfile[i])
 }
 
+file_copy(dir_ls(out2, regexp = "dvw$"), "001_2223_PGSFOGLIZZESE/U14F/scouts/allenamenti/all/")
 
