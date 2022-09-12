@@ -3,11 +3,13 @@ source("001_2223_PGSFOGLIZZESE/U14F/scripts/999_functions.R")
 pres <- readr::read_tsv("001_2223_PGSFOGLIZZESE/U14F/tmp/presenze.tsv")
 players <- readr::read_table("001_2223_PGSFOGLIZZESE/U14F/tmp/players.tsv")
 
-pres <- add(players,
-    date = "20220906",
-    assenti = c(22, 14))
+tail(pres, n = 12)
 
-tail(pres, n = 11)
+pres <- add(players,
+    date = "20220908",
+    assenti = c(65, 14))
+
+tail(pres, n = 12)
 
 file_copy("001_2223_PGSFOGLIZZESE/U14F/tmp/presenze.tsv",
           "001_2223_PGSFOGLIZZESE/U14F/tmp/presenze_old.tsv",
@@ -20,7 +22,7 @@ pres %>%
                 values_from = assenti) %>% 
     janitor::adorn_totals("row") %>% 
     janitor::adorn_totals("col") %>% 
-    gt(id = "mygt") %>% 
+    gt::gt(id = "mygt") %>% 
     gtExtras::gt_theme_538() %>% 
     gtExtras:: gt_plt_bar(column = Total, keep_column = TRUE,
                           width = 35, color = "grey") 
