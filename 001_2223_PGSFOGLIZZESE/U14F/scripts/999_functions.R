@@ -97,3 +97,14 @@ add <- function(x,
                       mutate(date = lubridate::ymd(date),
                              assenti = ifelse(Numero %in% assenti, 1, 0)))
 }
+
+##########################
+# Classifica
+classifica <- function(x,
+                date = "20220830",
+                vincitori = c(22, 5)){
+    class %>% 
+        bind_rows(x %>% 
+                      mutate(date = lubridate::ymd(date),
+                             vincitori = ifelse(Numero %in% vincitori, 1, 0)))
+}
